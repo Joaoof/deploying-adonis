@@ -5,7 +5,7 @@ import { join } from 'path'
 import 'reflect-metadata'
 import sourceMapSupport from 'source-map-support'
 
-process.env.NODE_ENV = 'testing'
+process.env.NODE_ENV = 'development'
 process.env.ADONIS_ACE_CWD = join(__dirname)
 sourceMapSupport.install({ handleUncaughtExceptions: false })
 

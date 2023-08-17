@@ -147,7 +147,8 @@ export const logger: LoggerConfig = {
   | reading the `name` property from the `package.json` file.
   |
   */
-  name: 'adonisjs-udemy',
+  name: Env.get('APP_NAME'),
+
 
   /*
   |--------------------------------------------------------------------------

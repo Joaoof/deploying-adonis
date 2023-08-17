@@ -20,18 +20,23 @@ services:
     networks:
       - minha-rede
   db:
-    image: postgres
+     image: postgres
+     restart: always
+     environment:
+       POSTGRES_PASSWORD: secret123
+       POSTGRES_USER: bhayron
+       POSTGRES_DB: sistema
+     expose:
+       - "5432"
+     ports:
+       - 5432:5432
+     networks:
+       - minha-rede
+  adminer:
+    image: adminer
     restart: always
-    environment:
-      POSTGRES_PASSWORD: secret123
-      POSTGRES_USER: bhayron
-      POSTGRES_DB: sistema
-    expose:
-      - "5432"
     ports:
-      - 5432:5432
-    networks:
-      - minha-rede
+      - 8080:8080
 networks:
    minha-rede:
     driver: bridge
