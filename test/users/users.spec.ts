@@ -3,9 +3,11 @@ import { UserFactory } from 'Database/factories/index' // importa a classe UserF
 import test from 'japa' // importa a biblioteca Japa para escrever testes unitários
 import supertest from 'supertest' //  importa a biblioteca supertest para fazer requisições HTTP durante os testes
 import Hash from '@ioc:Adonis/Core/Hash' // importação de atualização do password do user
+import User from 'App/Models/User'
 
 const BASE_URL = `http://${process.env.HOST}:${process.env.PORT}` // Define a URL base da API com base nas variáveis de ambiente HOST e PORT.
 let token = ''
+let user = {} as User
 test.group('User', (group) => {
   // Define um grupo de testes chamado "User".
 
@@ -125,29 +127,28 @@ test.group('User', (group) => {
 
   test('it should update an user!', async (assert) => {
     // Cria um usuário de teste no banco de dados usando a Factory ou inserindo manualmente.
-    const { id, password } = await UserFactory.create()
     const email = 'seila@gmail.com'
     const avatar = 'http://github.com/Joaoof.png'
 
     // Faz uma requisição PUT para a rota de atualização com os dados atualizados do usuário.
     const { body } = await supertest(BASE_URL)
-      .put(`/users/${id}`)
+      .put(`/users/${user.id}`)
       .set('Authorization', `Bearer ${token}`)
       .send({
         email,
         avatar,
-        password,
+        password: user.password
       })
       .expect(200)
 
     assert.exists(body.user, 'User undefined') // precisa existir dentro da resposta um objeto user.
     assert.equal(body.user.email, email) // se os valores retornados são iguais aos que eu atualizei
     assert.equal(body.user.avatar, avatar) //  se os valores retornados são iguais aos que eu atualizei
-    assert.equal(body.user.id, id) //  se os valores retornados são iguais aos que eu atualizei.
+    assert.equal(body.user.id, user.id) //  se os valores retornados são iguais aos que eu atualizei.
     console.log()
   })
 
-  test('it should update the password of the user', async (assert) => {
+  test.only('it should update the password of the user', async (assert) => {
     const user = await UserFactory.create()
     const password = 'teste'
     // Faz uma requisição PUT para a rota de atualização com os dados atualizados do usuário.
@@ -250,15 +251,16 @@ test.group('User', (group) => {
 
   group.before(async () => {
     const plainPassword = 'test'
-    const { email } = await UserFactory.merge({
+    const newUser = await UserFactory.merge({
       password: plainPassword,
     }).create()
     const { body } = await supertest(BASE_URL)
       .post('/sessions')
-      .send({ email, password: plainPassword })
+      .send({ email: newUser.email, password: plainPassword })
       .expect(201)
 
     token = body.token.token
+    user = newUser
   })
 
   group.beforeEach(async () => {

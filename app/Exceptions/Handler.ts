@@ -54,6 +54,13 @@ export default class ExceptionHandler extends HttpExceptionHandler {
         message: 'invalid password',
         status: 400,
       })
+    else if (error.code === 'E_AUTHORIZATION_FAILURE')
+      return ctx.response.status(error.status).send({
+        code: 'BAD_REQUEST',
+        message: 'Not authorized',
+        status: 403,
+      })
+
     return super.handle(error, ctx)
   }
 }
