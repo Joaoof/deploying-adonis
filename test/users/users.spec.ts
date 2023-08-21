@@ -148,9 +148,8 @@ test.group('User', (group) => {
     console.log()
   })
 
-  test.only('it should update the password of the user', async (assert) => {
-    const user = await UserFactory.create()
-    const password = 'teste'
+  test('it should update the password of the user', async (assert) => {
+    const password = 'test'
     // Faz uma requisição PUT para a rota de atualização com os dados atualizados do usuário.
     const { body } = await supertest(BASE_URL)
       .put(`/users/${user.id}`)
@@ -173,7 +172,6 @@ test.group('User', (group) => {
     const { id } = await UserFactory.create()
     const { body } = await supertest(BASE_URL)
       .put(`/users/${id}`)
-      .send({})
       .set('Authorization', `Bearer ${token}`)
       // logica aplicada em UsersController.ts --> linha 8
       .expect(422)

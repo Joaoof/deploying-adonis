@@ -24,7 +24,7 @@ export default class ExceptionHandler extends HttpExceptionHandler {
   }
 
   public async handle(error: Exception, ctx: HttpContextContract) {
-    console.log(error)
+    console.log({ error })
 
     if (error.status === 422)
       return ctx.response.status(error.status).send({

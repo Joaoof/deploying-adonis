@@ -35,7 +35,7 @@ test.group('Password', (group) => {
     Mail.restore()
   })
 
-  test('it should create a reset password token', async (assert) => {
+  test.only('it should create a reset password token', async (assert) => {
     const user = await UserFactory.create()
     await supertest(BASE_URL)
       .post('/forgot-password')
