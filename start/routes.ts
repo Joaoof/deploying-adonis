@@ -27,10 +27,16 @@ Route.get('/', async () => {
 Route.get('/users/list', 'UsersController.show')
 Route.post('/users', 'UsersController.store')
 Route.put('/users/:id', 'UsersController.update').middleware('auth')
+Route.delete('/users/delete/:id', 'UsersController.destroy')
+
 Route.post('/forgot-password', 'PasswordsController.forgotPassword')
 Route.post('/reset-password', 'PasswordsController.resetPassword')
-Route.delete('/users/delete/:id', 'UsersController.destroy')
+
+
 Route.post('/sessions', 'SessionsController.store')
 Route.delete('/sessions', 'SessionsController.destroy')
+
+Route.post('/groups', 'GroupsController.store')
+
 
 // Adicione outras rotas conforme necessário
